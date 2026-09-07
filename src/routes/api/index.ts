@@ -15,6 +15,21 @@ export const Route = createFileRoute("/api/")({
             "Official Implementation for Showcasing the Mankai HttpPlugin API Specification",
           authors: ["Travis XU"],
           repository: "https://github.com/nohackjustnoobb/mankai-server",
+          capabilities: [
+            "onlineCheck",
+            "suggestions",
+            "list",
+            "listByGenre",
+            "listByStatus",
+            "search",
+            "searchByGenre",
+            "searchByStatus",
+            "searchByAuthor",
+            "mangaDetails",
+            "batchMangas",
+            "chapter",
+            "image",
+          ],
         };
 
         return Response.json(response);
