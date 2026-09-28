@@ -1,12 +1,12 @@
 # Mankai Server
 
-A self-hosted manga server with an admin dashboard that implements the [Mankai HTTP Plugin API](https://github.com/nohackjustnoobb/mankai/blob/master/docs/httpplugin/api.md) for the [Mankai](https://github.com/nohackjustnoobb/mankai) manga reader.
+A self-hosted manga server with an admin dashboard that implements the [Mankai HTTP Plugin API](https://github.com/mankai-app/mankai/blob/master/docs/httpplugin/api.md) for the [Mankai](https://github.com/mankai-app/mankai) manga reader.
 
 Point the Mankai app at `http://<host>:3000/api`, sign in, and your library and reading progress sync across devices.
 
 ## Features
 
-- Full Mankai API support: server info, JWT auth, manga browsing, search, suggestions, and the in-app [editor API](https://github.com/nohackjustnoobb/mankai/blob/master/docs/httpplugin/editor-api.md).
+- Full Mankai API support: server info, JWT auth, manga browsing, search, suggestions, and the in-app [editor API](https://github.com/mankai-app/mankai/blob/master/docs/httpplugin/editor-api.md).
 - Web admin dashboard for managing manga, chapter groups, chapters, page images, covers, and users.
 - Semantic search and autocomplete powered by local sentence embeddings (`Xenova/bge-m3`) indexed with pgvector.
 - Reading progress and saved-library sync with incremental endpoints.
