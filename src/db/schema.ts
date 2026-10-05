@@ -1,5 +1,7 @@
 import {
   pgTable,
+  bigint,
+  jsonb,
   pgEnum,
   text,
   timestamp,
@@ -12,6 +14,7 @@ import {
   foreignKey,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
+import type { LatestChapter } from "#/utils/syncProtocol.ts";
 import { Genre } from "#/utils/types.ts";
 
 // User
@@ -335,5 +338,67 @@ export const trackingImage = pgTable(
     }).onDelete("cascade"),
     index("tracking_image_image_id_idx").on(t.imageId),
     index("tracking_image_tracking_id_status_idx").on(t.trackingId, t.status),
+  ],
+);
+
+// Sync state is independent of the manga catalog so it can contain any source.
+
+export const syncAccount = pgTable("sync_account", {
+  account: text("user_id")
+    .primaryKey()
+    .references(() => user.id, { onDelete: "cascade" }),
+  revision: bigint("revision", { mode: "number" }).notNull().default(0),
+  progressClearDatetime: bigint("progress_clear_datetime", { mode: "number" }),
+  progressClearRevision: bigint("progress_clear_revision", { mode: "number" }),
+});
+
+const syncItemColumns = () => ({
+  account: text("user_id")
+    .notNull()
+    .references(() => syncAccount.account, { onDelete: "cascade" }),
+  sourceId: text("source_id").notNull(),
+  revision: bigint("revision", { mode: "number" }).notNull(),
+  datetime: bigint("datetime", { mode: "number" }).notNull(),
+  deleted: boolean("deleted").notNull(),
+});
+
+export const syncPlugin = pgTable(
+  "sync_plugin",
+  {
+    ...syncItemColumns(),
+    url: text("url"),
+  },
+  (t) => [
+    primaryKey({ columns: [t.account, t.sourceId] }),
+    index("sync_plugin_revision_idx").on(t.account, t.revision),
+  ],
+);
+
+export const syncLibrary = pgTable(
+  "sync_library",
+  {
+    ...syncItemColumns(),
+    mangaId: text("manga_id").notNull(),
+    updates: boolean("updates"),
+    latestChapter: jsonb("latest_chapter").$type<LatestChapter>(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.account, t.sourceId, t.mangaId] }),
+    index("sync_library_revision_idx").on(t.account, t.revision),
+  ],
+);
+
+export const syncProgress = pgTable(
+  "sync_progress",
+  {
+    ...syncItemColumns(),
+    mangaId: text("manga_id").notNull(),
+    chapterId: text("chapter_id"),
+    chapterTitle: text("chapter_title"),
+    page: bigint("page", { mode: "number" }),
+  },
+  (t) => [
+    primaryKey({ columns: [t.account, t.sourceId, t.mangaId] }),
+    index("sync_progress_revision_idx").on(t.account, t.revision),
   ],
 );

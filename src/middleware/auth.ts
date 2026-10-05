@@ -27,10 +27,7 @@ export const apiAuthMiddleware = createMiddleware().server(async ({ next }) => {
     ? authFromAccessToken(bearerMatch[1])
     : (await useAppSession()).data;
 
-  if (
-    !auth.userId ||
-    (auth.role !== "admin" && auth.role !== "member")
-  ) {
+  if (!auth.userId || (auth.role !== "admin" && auth.role !== "member")) {
     throw new Response("Unauthorized", { status: 401 });
   }
 

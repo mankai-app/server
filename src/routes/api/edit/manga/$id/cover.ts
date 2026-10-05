@@ -62,10 +62,7 @@ export const Route = createFileRoute("/api/edit/manga/$id/cover")({
             .bytes();
           await Bun.write(newFilePath, webpBytes);
         } catch (imageError) {
-          apiLogger.error(
-            { err: imageError },
-            "failed to encode editor cover",
-          );
+          apiLogger.error({ err: imageError }, "failed to encode editor cover");
           return Response.json(
             { message: "Invalid cover image data" },
             { status: 400 },

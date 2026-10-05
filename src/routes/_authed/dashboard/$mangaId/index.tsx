@@ -214,10 +214,7 @@ function MangaDetailsView() {
         requestInFlight = false;
         if (cancelled) return;
 
-        if (
-          refreshQueued &&
-          document.visibilityState === "visible"
-        ) {
+        if (refreshQueued && document.visibilityState === "visible") {
           refreshQueued = false;
           void pollTracking();
         } else {
@@ -514,9 +511,7 @@ function MangaDetailsView() {
                   disabled={updatingTracking}
                 >
                   <Activity size={16} />
-                  <span>
-                    {updatingTracking ? "Adding…" : "Track updates"}
-                  </span>
+                  <span>{updatingTracking ? "Adding…" : "Track updates"}</span>
                 </button>
               )}
             </div>

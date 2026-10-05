@@ -2,6 +2,20 @@ import { defineRelations } from "drizzle-orm";
 import * as schema from "./schema";
 
 const relations = defineRelations(schema, (r) => ({
+  syncAccount: {
+    plugins: r.many.syncPlugin({
+      from: r.syncAccount.account,
+      to: r.syncPlugin.account,
+    }),
+    library: r.many.syncLibrary({
+      from: r.syncAccount.account,
+      to: r.syncLibrary.account,
+    }),
+    progress: r.many.syncProgress({
+      from: r.syncAccount.account,
+      to: r.syncProgress.account,
+    }),
+  },
   user: {
     createdManga: r.many.manga(),
     trackingMangaRequests: r.many.trackingMangaRequest(),
@@ -78,17 +92,11 @@ const relations = defineRelations(schema, (r) => ({
     }),
     chapters: r.many.trackingChapter({
       from: [r.trackingManga.trackingId, r.trackingManga.id],
-      to: [
-        r.trackingChapter.trackingId,
-        r.trackingChapter.trackingMangaId,
-      ],
+      to: [r.trackingChapter.trackingId, r.trackingChapter.trackingMangaId],
     }),
     images: r.many.trackingImage({
       from: [r.trackingManga.trackingId, r.trackingManga.id],
-      to: [
-        r.trackingImage.trackingId,
-        r.trackingImage.trackingMangaId,
-      ],
+      to: [r.trackingImage.trackingId, r.trackingImage.trackingMangaId],
     }),
   },
   trackingMangaRequest: {
@@ -131,10 +139,7 @@ const relations = defineRelations(schema, (r) => ({
   },
   trackingChapter: {
     trackingManga: r.one.trackingManga({
-      from: [
-        r.trackingChapter.trackingId,
-        r.trackingChapter.trackingMangaId,
-      ],
+      from: [r.trackingChapter.trackingId, r.trackingChapter.trackingMangaId],
       to: [r.trackingManga.trackingId, r.trackingManga.id],
     }),
     trackingChapterGroup: r.one.trackingChapterGroup({
@@ -168,10 +173,7 @@ const relations = defineRelations(schema, (r) => ({
   },
   trackingImage: {
     trackingManga: r.one.trackingManga({
-      from: [
-        r.trackingImage.trackingId,
-        r.trackingImage.trackingMangaId,
-      ],
+      from: [r.trackingImage.trackingId, r.trackingImage.trackingMangaId],
       to: [r.trackingManga.trackingId, r.trackingManga.id],
     }),
     trackingChapter: r.one.trackingChapter({

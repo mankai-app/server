@@ -22,9 +22,10 @@ const TRACKER_POLL_INTERVAL_MS = 10_000;
 
 type StatusTone = "neutral" | "warning" | "error" | "success";
 
-function getStatus(
-  state: TrackerSummary["state"],
-): { label: string; tone: StatusTone } {
+function getStatus(state: TrackerSummary["state"]): {
+  label: string;
+  tone: StatusTone;
+} {
   switch (state) {
     case "queued":
       return { label: "Queued", tone: "warning" };
@@ -134,10 +135,7 @@ function TrackerView() {
         if (cancelled) return;
         if (initial) setLoading(false);
 
-        if (
-          refreshQueued &&
-          document.visibilityState === "visible"
-        ) {
+        if (refreshQueued && document.visibilityState === "visible") {
           refreshQueued = false;
           void refresh();
         } else {
@@ -160,19 +158,13 @@ function TrackerView() {
     }
 
     void refresh(true);
-    window.addEventListener(
-      TRACKER_REQUEST_CHANGED_EVENT,
-      refreshNow,
-    );
+    window.addEventListener(TRACKER_REQUEST_CHANGED_EVENT, refreshNow);
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
       cancelled = true;
       clearPollTimer();
-      window.removeEventListener(
-        TRACKER_REQUEST_CHANGED_EVENT,
-        refreshNow,
-      );
+      window.removeEventListener(TRACKER_REQUEST_CHANGED_EVENT, refreshNow);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [fetchTrackingRequests, notify]);

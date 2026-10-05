@@ -101,10 +101,7 @@ export const Route = createFileRoute("/api/edit/chapter/$id/images")({
                 .bytes();
               await Bun.write(`${CHAPTER_IMAGES_DIR}/${id}.webp`, webpBytes);
             } catch (error) {
-              apiLogger.error(
-                { err: error },
-                "failed to encode chapter image",
-              );
+              apiLogger.error({ err: error }, "failed to encode chapter image");
               return { ok: false, error: "Failed to save images" } as const;
             }
 

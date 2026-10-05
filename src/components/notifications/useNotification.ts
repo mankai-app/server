@@ -1,6 +1,9 @@
 import { useContext } from "react";
 
-import { NotificationContext, type NotificationContextValue } from "./NotificationProvider";
+import {
+  NotificationContext,
+  type NotificationContextValue,
+} from "./NotificationProvider";
 
 /**
  * Consume the notification system. Returns `{ notifications, notify, dismiss }`
@@ -15,7 +18,9 @@ import { NotificationContext, type NotificationContextValue } from "./Notificati
 export function useNotification(): NotificationContextValue {
   const ctx = useContext(NotificationContext);
   if (!ctx) {
-    throw new Error("useNotification must be used within a <NotificationProvider>");
+    throw new Error(
+      "useNotification must be used within a <NotificationProvider>",
+    );
   }
   return ctx;
 }

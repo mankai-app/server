@@ -13,6 +13,7 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as AuthedRouteImport } from './routes/_authed'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiIndexRouteImport } from './routes/api/index'
+import { Route as ApiSyncRouteImport } from './routes/api/sync'
 import { Route as ApiSuggestionRouteImport } from './routes/api/suggestion'
 import { Route as ApiSearchRouteImport } from './routes/api/search'
 import { Route as AuthedDashboardRouteImport } from './routes/_authed/dashboard'
@@ -57,6 +58,11 @@ const IndexRoute = IndexRouteImport.update({
 const ApiIndexRoute = ApiIndexRouteImport.update({
   id: '/api/',
   path: '/api/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSyncRoute = ApiSyncRouteImport.update({
+  id: '/api/sync',
+  path: '/api/sync',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiSuggestionRoute = ApiSuggestionRouteImport.update({
@@ -204,6 +210,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthedDashboardRouteWithChildren
   '/api/search': typeof ApiSearchRoute
   '/api/suggestion': typeof ApiSuggestionRoute
+  '/api/sync': typeof ApiSyncRoute
   '/api/': typeof ApiIndexRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/refresh': typeof ApiAuthRefreshRoute
@@ -234,6 +241,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/api/search': typeof ApiSearchRoute
   '/api/suggestion': typeof ApiSuggestionRoute
+  '/api/sync': typeof ApiSyncRoute
   '/api': typeof ApiIndexRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/refresh': typeof ApiAuthRefreshRoute
@@ -267,6 +275,7 @@ export interface FileRoutesById {
   '/_authed/dashboard': typeof AuthedDashboardRouteWithChildren
   '/api/search': typeof ApiSearchRoute
   '/api/suggestion': typeof ApiSuggestionRoute
+  '/api/sync': typeof ApiSyncRoute
   '/api/': typeof ApiIndexRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/refresh': typeof ApiAuthRefreshRoute
@@ -300,6 +309,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/api/search'
     | '/api/suggestion'
+    | '/api/sync'
     | '/api/'
     | '/api/auth/login'
     | '/api/auth/refresh'
@@ -330,6 +340,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/api/search'
     | '/api/suggestion'
+    | '/api/sync'
     | '/api'
     | '/api/auth/login'
     | '/api/auth/refresh'
@@ -362,6 +373,7 @@ export interface FileRouteTypes {
     | '/_authed/dashboard'
     | '/api/search'
     | '/api/suggestion'
+    | '/api/sync'
     | '/api/'
     | '/api/auth/login'
     | '/api/auth/refresh'
@@ -394,6 +406,7 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
   ApiSearchRoute: typeof ApiSearchRoute
   ApiSuggestionRoute: typeof ApiSuggestionRoute
+  ApiSyncRoute: typeof ApiSyncRoute
   ApiIndexRoute: typeof ApiIndexRoute
   ApiAuthLoginRoute: typeof ApiAuthLoginRoute
   ApiAuthRefreshRoute: typeof ApiAuthRefreshRoute
@@ -443,6 +456,13 @@ declare module '@tanstack/react-router' {
       path: '/api'
       fullPath: '/api/'
       preLoaderRoute: typeof ApiIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/sync': {
+      id: '/api/sync'
+      path: '/api/sync'
+      fullPath: '/api/sync'
+      preLoaderRoute: typeof ApiSyncRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/suggestion': {
@@ -667,6 +687,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   ApiSearchRoute: ApiSearchRoute,
   ApiSuggestionRoute: ApiSuggestionRoute,
+  ApiSyncRoute: ApiSyncRoute,
   ApiIndexRoute: ApiIndexRoute,
   ApiAuthLoginRoute: ApiAuthLoginRoute,
   ApiAuthRefreshRoute: ApiAuthRefreshRoute,

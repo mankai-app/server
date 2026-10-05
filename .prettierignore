@@ -1,0 +1,4 @@
+src/routeTree.gen.ts
+drizzle/
+bun.lock
+.husky/_/

@@ -7,9 +7,7 @@ import type { APIChapter } from "#/utils/api.server.ts";
 
 const paramsSchema = z.object({ id: z.string().min(1) });
 
-export const Route = createFileRoute(
-  "/api/edit/chapter-group/$id/chapters",
-)({
+export const Route = createFileRoute("/api/edit/chapter-group/$id/chapters")({
   server: {
     middleware: [apiAuthMiddleware],
     handlers: {
