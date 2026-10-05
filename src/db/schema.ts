@@ -143,56 +143,6 @@ export const image = pgTable(
   ],
 );
 
-// Sync
-
-export const record = pgTable(
-  "record",
-  {
-    mangaId: text("manga_id").notNull(),
-    pluginId: text("plugin_id").notNull(),
-    userId: text("user_id")
-      .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
-
-    datetime: timestamp("datetime").notNull(),
-    chapterId: text("chapter_id").notNull(),
-    chapterTitle: text("chapter_title"),
-    page: integer("page").notNull(),
-    updatedAt: timestamp("updated_at")
-      .defaultNow()
-      .$onUpdate(() => new Date())
-      .notNull(),
-  },
-  (t) => [
-    primaryKey({ columns: [t.mangaId, t.pluginId, t.userId] }),
-    index("record_user_id_idx").on(t.userId),
-  ],
-);
-
-export const saved = pgTable(
-  "saved",
-  {
-    mangaId: text("manga_id").notNull(),
-    pluginId: text("plugin_id").notNull(),
-    userId: text("user_id")
-      .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
-
-    datetime: timestamp("datetime").notNull(),
-    updates: boolean("updates").notNull(),
-    latestChapter: text("latest_chapter").notNull(),
-    isDeleted: boolean("is_deleted").notNull().default(false),
-    updatedAt: timestamp("updated_at")
-      .defaultNow()
-      .$onUpdate(() => new Date())
-      .notNull(),
-  },
-  (t) => [
-    primaryKey({ columns: [t.mangaId, t.pluginId, t.userId] }),
-    index("saved_user_id_idx").on(t.userId),
-  ],
-);
-
 // Tracker
 
 export const trackingStatusEnum = pgEnum("tracking_status", [

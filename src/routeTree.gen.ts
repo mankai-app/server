@@ -13,18 +13,11 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as AuthedRouteImport } from './routes/_authed'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiIndexRouteImport } from './routes/api/index'
-import { Route as ApiSyncRouteImport } from './routes/api/sync'
 import { Route as ApiSuggestionRouteImport } from './routes/api/suggestion'
 import { Route as ApiSearchRouteImport } from './routes/api/search'
-import { Route as ApiRecordsRouteImport } from './routes/api/records'
 import { Route as AuthedDashboardRouteImport } from './routes/_authed/dashboard'
-import { Route as ApiSavedsIndexRouteImport } from './routes/api/saveds/index'
 import { Route as ApiMangaIndexRouteImport } from './routes/api/manga/index'
 import { Route as AuthedDashboardIndexRouteImport } from './routes/_authed/dashboard/index'
-import { Route as ApiSavedsRemoveRouteImport } from './routes/api/saveds/remove'
-import { Route as ApiSavedsHashRouteImport } from './routes/api/saveds/hash'
-import { Route as ApiSavedsDeletedRouteImport } from './routes/api/saveds/deleted'
-import { Route as ApiSavedsAddRouteImport } from './routes/api/saveds/add'
 import { Route as ApiImageSplatRouteImport } from './routes/api/image/$'
 import { Route as ApiAuthRefreshRouteImport } from './routes/api/auth/refresh'
 import { Route as ApiAuthLoginRouteImport } from './routes/api/auth/login'
@@ -66,11 +59,6 @@ const ApiIndexRoute = ApiIndexRouteImport.update({
   path: '/api/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiSyncRoute = ApiSyncRouteImport.update({
-  id: '/api/sync',
-  path: '/api/sync',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiSuggestionRoute = ApiSuggestionRouteImport.update({
   id: '/api/suggestion',
   path: '/api/suggestion',
@@ -81,20 +69,10 @@ const ApiSearchRoute = ApiSearchRouteImport.update({
   path: '/api/search',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiRecordsRoute = ApiRecordsRouteImport.update({
-  id: '/api/records',
-  path: '/api/records',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthedDashboardRoute = AuthedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthedRoute,
-} as any)
-const ApiSavedsIndexRoute = ApiSavedsIndexRouteImport.update({
-  id: '/api/saveds/',
-  path: '/api/saveds/',
-  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiMangaIndexRoute = ApiMangaIndexRouteImport.update({
   id: '/api/manga/',
@@ -105,26 +83,6 @@ const AuthedDashboardIndexRoute = AuthedDashboardIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthedDashboardRoute,
-} as any)
-const ApiSavedsRemoveRoute = ApiSavedsRemoveRouteImport.update({
-  id: '/api/saveds/remove',
-  path: '/api/saveds/remove',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiSavedsHashRoute = ApiSavedsHashRouteImport.update({
-  id: '/api/saveds/hash',
-  path: '/api/saveds/hash',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiSavedsDeletedRoute = ApiSavedsDeletedRouteImport.update({
-  id: '/api/saveds/deleted',
-  path: '/api/saveds/deleted',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiSavedsAddRoute = ApiSavedsAddRouteImport.update({
-  id: '/api/saveds/add',
-  path: '/api/saveds/add',
-  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiImageSplatRoute = ApiImageSplatRouteImport.update({
   id: '/api/image/$',
@@ -244,21 +202,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/signup': typeof SignupRoute
   '/dashboard': typeof AuthedDashboardRouteWithChildren
-  '/api/records': typeof ApiRecordsRoute
   '/api/search': typeof ApiSearchRoute
   '/api/suggestion': typeof ApiSuggestionRoute
-  '/api/sync': typeof ApiSyncRoute
   '/api/': typeof ApiIndexRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/refresh': typeof ApiAuthRefreshRoute
   '/api/image/$': typeof ApiImageSplatRoute
-  '/api/saveds/add': typeof ApiSavedsAddRoute
-  '/api/saveds/deleted': typeof ApiSavedsDeletedRoute
-  '/api/saveds/hash': typeof ApiSavedsHashRoute
-  '/api/saveds/remove': typeof ApiSavedsRemoveRoute
   '/dashboard/': typeof AuthedDashboardIndexRoute
   '/api/manga/': typeof ApiMangaIndexRoute
-  '/api/saveds/': typeof ApiSavedsIndexRoute
   '/dashboard/$mangaId/$chapterId': typeof AuthedDashboardMangaIdChapterIdRoute
   '/api/edit/chapter/order': typeof ApiEditChapterOrderRoute
   '/api/edit/images/delete': typeof ApiEditImagesDeleteRoute
@@ -281,21 +232,14 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/signup': typeof SignupRoute
-  '/api/records': typeof ApiRecordsRoute
   '/api/search': typeof ApiSearchRoute
   '/api/suggestion': typeof ApiSuggestionRoute
-  '/api/sync': typeof ApiSyncRoute
   '/api': typeof ApiIndexRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/refresh': typeof ApiAuthRefreshRoute
   '/api/image/$': typeof ApiImageSplatRoute
-  '/api/saveds/add': typeof ApiSavedsAddRoute
-  '/api/saveds/deleted': typeof ApiSavedsDeletedRoute
-  '/api/saveds/hash': typeof ApiSavedsHashRoute
-  '/api/saveds/remove': typeof ApiSavedsRemoveRoute
   '/dashboard': typeof AuthedDashboardIndexRoute
   '/api/manga': typeof ApiMangaIndexRoute
-  '/api/saveds': typeof ApiSavedsIndexRoute
   '/dashboard/$mangaId/$chapterId': typeof AuthedDashboardMangaIdChapterIdRoute
   '/api/edit/chapter/order': typeof ApiEditChapterOrderRoute
   '/api/edit/images/delete': typeof ApiEditImagesDeleteRoute
@@ -321,21 +265,14 @@ export interface FileRoutesById {
   '/_authed': typeof AuthedRouteWithChildren
   '/signup': typeof SignupRoute
   '/_authed/dashboard': typeof AuthedDashboardRouteWithChildren
-  '/api/records': typeof ApiRecordsRoute
   '/api/search': typeof ApiSearchRoute
   '/api/suggestion': typeof ApiSuggestionRoute
-  '/api/sync': typeof ApiSyncRoute
   '/api/': typeof ApiIndexRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/refresh': typeof ApiAuthRefreshRoute
   '/api/image/$': typeof ApiImageSplatRoute
-  '/api/saveds/add': typeof ApiSavedsAddRoute
-  '/api/saveds/deleted': typeof ApiSavedsDeletedRoute
-  '/api/saveds/hash': typeof ApiSavedsHashRoute
-  '/api/saveds/remove': typeof ApiSavedsRemoveRoute
   '/_authed/dashboard/': typeof AuthedDashboardIndexRoute
   '/api/manga/': typeof ApiMangaIndexRoute
-  '/api/saveds/': typeof ApiSavedsIndexRoute
   '/_authed/dashboard/$mangaId/$chapterId': typeof AuthedDashboardMangaIdChapterIdRoute
   '/api/edit/chapter/order': typeof ApiEditChapterOrderRoute
   '/api/edit/images/delete': typeof ApiEditImagesDeleteRoute
@@ -361,21 +298,14 @@ export interface FileRouteTypes {
     | '/'
     | '/signup'
     | '/dashboard'
-    | '/api/records'
     | '/api/search'
     | '/api/suggestion'
-    | '/api/sync'
     | '/api/'
     | '/api/auth/login'
     | '/api/auth/refresh'
     | '/api/image/$'
-    | '/api/saveds/add'
-    | '/api/saveds/deleted'
-    | '/api/saveds/hash'
-    | '/api/saveds/remove'
     | '/dashboard/'
     | '/api/manga/'
-    | '/api/saveds/'
     | '/dashboard/$mangaId/$chapterId'
     | '/api/edit/chapter/order'
     | '/api/edit/images/delete'
@@ -398,21 +328,14 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/signup'
-    | '/api/records'
     | '/api/search'
     | '/api/suggestion'
-    | '/api/sync'
     | '/api'
     | '/api/auth/login'
     | '/api/auth/refresh'
     | '/api/image/$'
-    | '/api/saveds/add'
-    | '/api/saveds/deleted'
-    | '/api/saveds/hash'
-    | '/api/saveds/remove'
     | '/dashboard'
     | '/api/manga'
-    | '/api/saveds'
     | '/dashboard/$mangaId/$chapterId'
     | '/api/edit/chapter/order'
     | '/api/edit/images/delete'
@@ -437,21 +360,14 @@ export interface FileRouteTypes {
     | '/_authed'
     | '/signup'
     | '/_authed/dashboard'
-    | '/api/records'
     | '/api/search'
     | '/api/suggestion'
-    | '/api/sync'
     | '/api/'
     | '/api/auth/login'
     | '/api/auth/refresh'
     | '/api/image/$'
-    | '/api/saveds/add'
-    | '/api/saveds/deleted'
-    | '/api/saveds/hash'
-    | '/api/saveds/remove'
     | '/_authed/dashboard/'
     | '/api/manga/'
-    | '/api/saveds/'
     | '/_authed/dashboard/$mangaId/$chapterId'
     | '/api/edit/chapter/order'
     | '/api/edit/images/delete'
@@ -476,20 +392,13 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthedRoute: typeof AuthedRouteWithChildren
   SignupRoute: typeof SignupRoute
-  ApiRecordsRoute: typeof ApiRecordsRoute
   ApiSearchRoute: typeof ApiSearchRoute
   ApiSuggestionRoute: typeof ApiSuggestionRoute
-  ApiSyncRoute: typeof ApiSyncRoute
   ApiIndexRoute: typeof ApiIndexRoute
   ApiAuthLoginRoute: typeof ApiAuthLoginRoute
   ApiAuthRefreshRoute: typeof ApiAuthRefreshRoute
   ApiImageSplatRoute: typeof ApiImageSplatRoute
-  ApiSavedsAddRoute: typeof ApiSavedsAddRoute
-  ApiSavedsDeletedRoute: typeof ApiSavedsDeletedRoute
-  ApiSavedsHashRoute: typeof ApiSavedsHashRoute
-  ApiSavedsRemoveRoute: typeof ApiSavedsRemoveRoute
   ApiMangaIndexRoute: typeof ApiMangaIndexRoute
-  ApiSavedsIndexRoute: typeof ApiSavedsIndexRoute
   ApiEditChapterOrderRoute: typeof ApiEditChapterOrderRoute
   ApiEditImagesDeleteRoute: typeof ApiEditImagesDeleteRoute
   ApiEditImagesOrderRoute: typeof ApiEditImagesOrderRoute
@@ -536,13 +445,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/sync': {
-      id: '/api/sync'
-      path: '/api/sync'
-      fullPath: '/api/sync'
-      preLoaderRoute: typeof ApiSyncRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/suggestion': {
       id: '/api/suggestion'
       path: '/api/suggestion'
@@ -557,26 +459,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSearchRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/records': {
-      id: '/api/records'
-      path: '/api/records'
-      fullPath: '/api/records'
-      preLoaderRoute: typeof ApiRecordsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_authed/dashboard': {
       id: '/_authed/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthedDashboardRouteImport
       parentRoute: typeof AuthedRoute
-    }
-    '/api/saveds/': {
-      id: '/api/saveds/'
-      path: '/api/saveds'
-      fullPath: '/api/saveds/'
-      preLoaderRoute: typeof ApiSavedsIndexRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/api/manga/': {
       id: '/api/manga/'
@@ -591,34 +479,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/'
       preLoaderRoute: typeof AuthedDashboardIndexRouteImport
       parentRoute: typeof AuthedDashboardRoute
-    }
-    '/api/saveds/remove': {
-      id: '/api/saveds/remove'
-      path: '/api/saveds/remove'
-      fullPath: '/api/saveds/remove'
-      preLoaderRoute: typeof ApiSavedsRemoveRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/saveds/hash': {
-      id: '/api/saveds/hash'
-      path: '/api/saveds/hash'
-      fullPath: '/api/saveds/hash'
-      preLoaderRoute: typeof ApiSavedsHashRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/saveds/deleted': {
-      id: '/api/saveds/deleted'
-      path: '/api/saveds/deleted'
-      fullPath: '/api/saveds/deleted'
-      preLoaderRoute: typeof ApiSavedsDeletedRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/saveds/add': {
-      id: '/api/saveds/add'
-      path: '/api/saveds/add'
-      fullPath: '/api/saveds/add'
-      preLoaderRoute: typeof ApiSavedsAddRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/api/image/$': {
       id: '/api/image/$'
@@ -805,20 +665,13 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthedRoute: AuthedRouteWithChildren,
   SignupRoute: SignupRoute,
-  ApiRecordsRoute: ApiRecordsRoute,
   ApiSearchRoute: ApiSearchRoute,
   ApiSuggestionRoute: ApiSuggestionRoute,
-  ApiSyncRoute: ApiSyncRoute,
   ApiIndexRoute: ApiIndexRoute,
   ApiAuthLoginRoute: ApiAuthLoginRoute,
   ApiAuthRefreshRoute: ApiAuthRefreshRoute,
   ApiImageSplatRoute: ApiImageSplatRoute,
-  ApiSavedsAddRoute: ApiSavedsAddRoute,
-  ApiSavedsDeletedRoute: ApiSavedsDeletedRoute,
-  ApiSavedsHashRoute: ApiSavedsHashRoute,
-  ApiSavedsRemoveRoute: ApiSavedsRemoveRoute,
   ApiMangaIndexRoute: ApiMangaIndexRoute,
-  ApiSavedsIndexRoute: ApiSavedsIndexRoute,
   ApiEditChapterOrderRoute: ApiEditChapterOrderRoute,
   ApiEditImagesDeleteRoute: ApiEditImagesDeleteRoute,
   ApiEditImagesOrderRoute: ApiEditImagesOrderRoute,

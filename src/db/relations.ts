@@ -4,8 +4,6 @@ import * as schema from "./schema";
 const relations = defineRelations(schema, (r) => ({
   user: {
     createdManga: r.many.manga(),
-    records: r.many.record(),
-    saveds: r.many.saved(),
     trackingMangaRequests: r.many.trackingMangaRequest(),
   },
   manga: {
@@ -57,18 +55,6 @@ const relations = defineRelations(schema, (r) => ({
     trackingImages: r.many.trackingImage({
       from: r.image.id,
       to: r.trackingImage.imageId,
-    }),
-  },
-  record: {
-    user: r.one.user({
-      from: r.record.userId,
-      to: r.user.id,
-    }),
-  },
-  saved: {
-    user: r.one.user({
-      from: r.saved.userId,
-      to: r.user.id,
     }),
   },
   trackingManga: {
