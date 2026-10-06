@@ -9,6 +9,10 @@ const uriPattern =
 
 const id = z.string().min(1).max(512);
 const pluginKey = z.strictObject({ sourceId: id });
+const pluginPayload = z.strictObject({
+  url: z.string().max(16384).regex(uriPattern),
+  type: z.string().max(64),
+});
 const mangaKey = z.strictObject({ sourceId: id, mangaId: id });
 const common = {
   operationId: z.string().min(1).max(128),
@@ -17,7 +21,7 @@ const common = {
 
 export const latestChapterSchema = z.strictObject({
   id,
-  title: z.string().optional(),
+  title: z.string().max(1024).optional(),
   locked: z.boolean().optional(),
 });
 export type LatestChapter = z.infer<typeof latestChapterSchema>;
@@ -28,7 +32,14 @@ export const mutationSchema = z.union([
     type: z.literal("plugin"),
     action: z.literal("upsert"),
     key: pluginKey,
-    payload: z.strictObject({ url: z.string().max(16384).regex(uriPattern) }),
+    payload: pluginPayload,
+  }),
+  z.strictObject({
+    ...common,
+    type: z.literal("browsableplugin"),
+    action: z.literal("upsert"),
+    key: pluginKey,
+    payload: pluginPayload,
   }),
   z.strictObject({
     ...common,
@@ -47,13 +58,19 @@ export const mutationSchema = z.union([
     key: mangaKey,
     payload: z.strictObject({
       chapterId: id,
-      chapterTitle: z.string().nullable(),
+      chapterTitle: z.string().max(1024).nullable(),
       page: z.number().int().min(0).max(Number.MAX_SAFE_INTEGER),
     }),
   }),
   z.strictObject({
     ...common,
     type: z.literal("plugin"),
+    action: z.literal("delete"),
+    key: pluginKey,
+  }),
+  z.strictObject({
+    ...common,
+    type: z.literal("browsableplugin"),
     action: z.literal("delete"),
     key: pluginKey,
   }),
@@ -80,7 +97,7 @@ export type Result = {
   current?: Change;
 };
 export type Target =
-  | { type: "plugin"; key: { sourceId: string } }
+  | { type: "plugin" | "browsableplugin"; key: { sourceId: string } }
   | {
       type: "library" | "progress";
       key: { sourceId: string; mangaId: string };

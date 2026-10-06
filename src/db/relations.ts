@@ -7,6 +7,10 @@ const relations = defineRelations(schema, (r) => ({
       from: r.syncAccount.account,
       to: r.syncPlugin.account,
     }),
+    browsablePlugins: r.many.syncBrowsablePlugin({
+      from: r.syncAccount.account,
+      to: r.syncBrowsablePlugin.account,
+    }),
     library: r.many.syncLibrary({
       from: r.syncAccount.account,
       to: r.syncLibrary.account,

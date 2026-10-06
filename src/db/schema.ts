@@ -362,15 +362,23 @@ const syncItemColumns = () => ({
   deleted: boolean("deleted").notNull(),
 });
 
-export const syncPlugin = pgTable(
-  "sync_plugin",
-  {
-    ...syncItemColumns(),
-    url: text("url"),
-  },
+const syncPluginColumns = () => ({
+  ...syncItemColumns(),
+  url: text("url"),
+  type: text("type"),
+});
+
+export const syncPlugin = pgTable("sync_plugin", syncPluginColumns(), (t) => [
+  primaryKey({ columns: [t.account, t.sourceId] }),
+  index("sync_plugin_revision_idx").on(t.account, t.revision),
+]);
+
+export const syncBrowsablePlugin = pgTable(
+  "sync_browsable_plugin",
+  syncPluginColumns(),
   (t) => [
     primaryKey({ columns: [t.account, t.sourceId] }),
-    index("sync_plugin_revision_idx").on(t.account, t.revision),
+    index("sync_browsable_plugin_revision_idx").on(t.account, t.revision),
   ],
 );
 

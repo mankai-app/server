@@ -5,6 +5,7 @@ import {
   user,
   syncAccount as accounts,
   syncPlugin as plugins,
+  syncBrowsablePlugin as browsablePlugins,
   syncLibrary as library,
   syncProgress as progress,
 } from "#/db/schema.ts";
@@ -27,7 +28,7 @@ const targetKey = (target: Target) =>
   JSON.stringify([
     target.type,
     target.key.sourceId,
-    target.type === "plugin" ? null : target.key.mangaId,
+    "mangaId" in target.key ? target.key.mangaId : null,
   ]);
 
 type Metadata = { revision: number; datetime: number };
@@ -37,16 +38,23 @@ const metadata = (row: Metadata) => ({
   datetime: row.datetime,
 });
 
-function pluginChange(row: typeof plugins.$inferSelect): Change {
+function pluginChange(
+  row: typeof plugins.$inferSelect,
+  type: "plugin" | "browsableplugin",
+): Change {
   const base = {
     ...metadata(row),
-    type: "plugin" as const,
+    type,
     key: { sourceId: row.sourceId },
   };
 
   return row.deleted
     ? { ...base, action: "delete" }
-    : { ...base, action: "upsert", payload: { url: row.url! } };
+    : {
+        ...base,
+        action: "upsert",
+        payload: { url: row.url!, type: row.type! },
+      };
 }
 
 function libraryChange(row: typeof library.$inferSelect): Change {
@@ -168,6 +176,7 @@ export function createSyncStore(
 
       const keys = {
         plugin: [] as string[],
+        browsableplugin: [] as string[],
         library: [] as SQL[],
         progress: [] as SQL[],
       };
@@ -175,7 +184,8 @@ export function createSyncStore(
       for (const mutation of mutations) {
         if (!mutation || mutation.action === "clear") continue;
 
-        if (mutation.type === "plugin") keys.plugin.push(mutation.key.sourceId);
+        if (mutation.type === "plugin" || mutation.type === "browsableplugin")
+          keys[mutation.type].push(mutation.key.sourceId);
         else
           keys[mutation.type].push(
             sql`(${mutation.key.sourceId}, ${mutation.key.mangaId})`,
@@ -196,6 +206,9 @@ export function createSyncStore(
         where: { account },
         with: {
           plugins: { where: { sourceId: { in: keys.plugin } } },
+          browsablePlugins: {
+            where: { sourceId: { in: keys.browsableplugin } },
+          },
           library: {
             where: { RAW: (table) => matchKeys(table, keys.library) },
           },
@@ -219,7 +232,10 @@ export function createSyncStore(
       const currentRows = new Map<string, Change>();
 
       for (const change of [
-        ...(loaded?.plugins ?? []).map(pluginChange),
+        ...(loaded?.plugins ?? []).map((row) => pluginChange(row, "plugin")),
+        ...(loaded?.browsablePlugins ?? []).map((row) =>
+          pluginChange(row, "browsableplugin"),
+        ),
         ...(loaded?.library ?? []).map(libraryChange),
         ...(loaded?.progress ?? []).map(progressChange),
       ]) {
@@ -336,17 +352,23 @@ export function createSyncStore(
             deleted: mutation.action === "delete",
           };
 
-          if (mutation.type === "plugin") {
+          if (
+            mutation.type === "plugin" ||
+            mutation.type === "browsableplugin"
+          ) {
+            const table =
+              mutation.type === "plugin" ? plugins : browsablePlugins;
             const row = {
               ...base,
               url: mutation.action === "upsert" ? mutation.payload.url : null,
+              type: mutation.action === "upsert" ? mutation.payload.type : null,
             };
 
             await tx
-              .insert(plugins)
+              .insert(table)
               .values(row)
               .onConflictDoUpdate({
-                target: [plugins.account, plugins.sourceId],
+                target: [table.account, table.sourceId],
                 set: row,
               });
           } else if (mutation.type === "library") {
@@ -423,6 +445,11 @@ export function createSyncStore(
                   orderBy: { revision: "asc" },
                   limit: limit + 1,
                 },
+                browsablePlugins: {
+                  where: { revision: { gt: after } },
+                  orderBy: { revision: "asc" },
+                  limit: limit + 1,
+                },
                 library: {
                   where: { revision: { gt: after } },
                   orderBy: { revision: "asc" },
@@ -437,7 +464,10 @@ export function createSyncStore(
             });
 
       const pending = [
-        ...(pageState?.plugins ?? []).map(pluginChange),
+        ...(pageState?.plugins ?? []).map((row) => pluginChange(row, "plugin")),
+        ...(pageState?.browsablePlugins ?? []).map((row) =>
+          pluginChange(row, "browsableplugin"),
+        ),
         ...(pageState?.library ?? []).map(libraryChange),
         ...(pageState?.progress ?? []).map(progressChange),
       ];
