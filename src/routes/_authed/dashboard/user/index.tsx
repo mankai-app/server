@@ -16,6 +16,7 @@ import {
 import { useEffect, useState } from "react";
 import { z } from "zod";
 
+import SourceQrButton from "#/components/SourceQrButton";
 import { useNotification } from "#/components/notifications/useNotification";
 import ConfirmModal from "#/modals/ConfirmModal.tsx";
 import UpsertUserModal, {
@@ -235,6 +236,7 @@ function RouteComponent() {
               <span>App URL</span>
             </div>
             <div className={styles.apiCardActions}>
+              <SourceQrButton apiUrl={apiUrl.url} />
               <button
                 type="button"
                 className={`outlineButton ${styles.copyButton}`}
@@ -254,9 +256,8 @@ function RouteComponent() {
             </div>
           </div>
           <p className={styles.apiDescription}>
-            This single URL powers both — paste it into{" "}
-            <strong>HTTPPlugin</strong> to browse manga, or{" "}
-            <strong>HTTPEngine</strong> to sync.
+            Scan the QR code with <strong>Mankai</strong> to add this source, or
+            add it manually using the URL below.
           </p>
           <code className={styles.apiUrl}>{apiUrl.url}</code>
         </div>
@@ -422,6 +423,7 @@ function RouteComponent() {
                               >
                                 {apiUrl}
                               </code>
+                              <SourceQrButton apiUrl={apiUrl} compact />
                               <button
                                 type="button"
                                 className={`iconButton ${styles.copyButton}`}

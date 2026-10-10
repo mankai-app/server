@@ -34,12 +34,12 @@ services:
       JWT_SECRET: changeme123-make-sure-it-is-at-least-32-characters
       ADMIN_EMAIL: admin@mankai.local
       ADMIN_PASSWORD: changeme123
-      # Useful when behind a reverse proxy
-      # BASE_API_URL: https://api.example.app
-      # It will use more memory but more accurate
-      # EMBEDDING_QUANTIZED: "0"
-      # Only when HTTPS is available for dashboards, API requests don't use cookies
-      # FORCE_SECURE_COOKIE: "true"
+    # Useful when behind a reverse proxy
+    # BASE_API_URL: https://api.example.app
+    # It will use more memory but more accurate
+    # EMBEDDING_QUANTIZED: "0"
+    # Only when HTTPS is available for dashboards, API requests don't use cookies
+    # FORCE_SECURE_COOKIE: "true"
     depends_on:
       postgres:
         condition: service_healthy

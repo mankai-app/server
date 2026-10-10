@@ -37,8 +37,9 @@
       .apiCardActions {
         display: flex;
         align-items: center;
+        justify-content: flex-end;
+        flex-wrap: wrap;
         gap: 0.5rem;
-        flex-shrink: 0;
       }
 
       .copyButton {

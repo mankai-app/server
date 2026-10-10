@@ -19,6 +19,8 @@ export const Route = createRootRoute({
       {
         title: "Mankai",
       },
+    ],
+    links: [
       {
         rel: "apple-touch-icon",
         sizes: "180x180",
@@ -37,8 +39,6 @@ export const Route = createRootRoute({
         href: "/favicon-16x16.png",
       },
       { rel: "manifest", href: "/site.webmanifest" },
-    ],
-    links: [
       {
         rel: "stylesheet",
         href: appCss,
