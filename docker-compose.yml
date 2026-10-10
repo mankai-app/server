@@ -34,6 +34,8 @@ services:
       JWT_SECRET: changeme123-make-sure-it-is-at-least-32-characters
       ADMIN_EMAIL: admin@mankai.local
       ADMIN_PASSWORD: changeme123
+    # Optional, takes precedence over ADMIN_PASSWORD. Escape each $ as $$.
+    # ADMIN_PASSWORD_HASH: "$$argon2id$$..."
     # Useful when behind a reverse proxy
     # BASE_API_URL: https://api.example.app
     # It will use more memory but more accurate

@@ -26,6 +26,8 @@ environment:
   SERVER_ID: mankai-server
   ADMIN_EMAIL: admin@mankai.local
   ADMIN_PASSWORD: changeme123
+  # Optional, takes precedence over ADMIN_PASSWORD. Escape each $ as $$.
+  # ADMIN_PASSWORD_HASH: "$$argon2id$$..."
   # BASE_API_URL: https://api.example.app
   # EMBEDDING_QUANTIZED: "0"
   # FORCE_SECURE_COOKIE: "true"
@@ -38,7 +40,15 @@ environment:
 docker compose up -d --build
 ```
 
-On startup the container runs migrations, seeds the admin user from `ADMIN_EMAIL` / `ADMIN_PASSWORD` (idempotent), and serves the app on port 3000.
+On startup the container runs migrations, seeds the admin user from `ADMIN_EMAIL` and either `ADMIN_PASSWORD_HASH` or `ADMIN_PASSWORD` (idempotent), and serves the app on port 3000.
+
+`ADMIN_PASSWORD_HASH` takes precedence when both are set and is stored directly without rehashing. It must be a valid password hash supported by [Bun.password.verify](https://bun.sh/docs/runtime/hashing), such as Argon2 or bcrypt. An invalid hash stops admin seeding. If no hash is provided, `ADMIN_PASSWORD` must contain at least 8 characters.
+
+Generate a hash with Bun, escaped for use in `docker-compose.yml`:
+
+```bash
+bun -e 'console.log((await Bun.password.hash("your-password-here")).replaceAll("$", () => "$$"))'
+```
 
 3. Open `http://localhost:3000` for the dashboard, or add a server in the Mankai app with base URL `http://<host>:3000/api`.
 
