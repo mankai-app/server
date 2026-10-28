@@ -15,6 +15,8 @@ export const Route = createFileRoute("/api/")({
             "A self-hosted manga server compatible with the Mankai HTTP API",
           authors: ["Travis XU"],
           repository: "https://github.com/nohackjustnoobb/mankai-server",
+          icon: "https://mankai.app/icon.png",
+          homePage: "https://mankai.app/api/http-api",
           capabilities: [
             "onlineCheck",
             "suggestions",
