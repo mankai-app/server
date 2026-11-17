@@ -44,7 +44,8 @@ export const Route = createFileRoute("/api/manga/")({
               },
             },
           },
-          orderBy: { updatedAt: "desc" },
+          // The default list order also serves sortBy=updateTime.
+          orderBy: { updatedAt: "desc", id: "asc" },
           limit: PAGE_SIZE,
           offset: (page - 1) * PAGE_SIZE,
         });

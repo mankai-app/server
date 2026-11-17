@@ -35,7 +35,9 @@ const mangaRequestSchema = z.object({
     .optional()
     .transform((value) => value || null),
   authors: z.array(z.string().trim()),
-  genres: z.array(z.enum(Genre)),
+  genres: z
+    .array(z.enum(Genre))
+    .transform((genres) => genres.filter((genre) => genre !== Genre.All)),
   remarks: z
     .string()
     .trim()

@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { apiAuthMiddleware } from "#/middleware/auth.ts";
 import db from "#/lib/db.server";
 import { chapter, chapterGroup, manga } from "#/db/schema";
-import { Status, ReadingDirection } from "#/utils/types.ts";
+import { Genre, Status, ReadingDirection } from "#/utils/types.ts";
 import type {
   APIChapter,
   APIChapterGroup,
@@ -108,7 +108,7 @@ export const Route = createFileRoute("/api/manga/$id/")({
         const result: APIDetailedManga = {
           id: detail.id,
           authors: detail.authors ?? [],
-          genres: detail.genres ?? [],
+          genres: (detail.genres ?? []).filter((genre) => genre !== Genre.All),
           chapters,
           updatedAt: detail.updatedAt.getTime(),
           editable:

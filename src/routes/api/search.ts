@@ -29,10 +29,12 @@ export const Route = createFileRoute("/api/search")({
         const genre = parseGenre(params.get("genre"));
         const status = parseStatus(params.get("status"));
         const isAuthor = params.get("isAuthor") === "true";
+        const sortByUpdateTime = params.get("sortBy") === "updateTime";
         const searchPattern = `%${search}%`;
 
+        // Embedding search ranks the catalog. Date sorting needs title matches.
         let searchEmbedding: number[] | null = null;
-        if (!isAuthor) {
+        if (!isAuthor && !sortByUpdateTime) {
           try {
             searchEmbedding = await embed(search);
           } catch (err) {
@@ -46,6 +48,10 @@ export const Route = createFileRoute("/api/search")({
             status: status !== Status.Any ? status : undefined,
             genres:
               genre !== Genre.All ? { arrayContains: [genre] } : undefined,
+            title:
+              sortByUpdateTime && !isAuthor
+                ? { ilike: searchPattern }
+                : undefined,
             RAW: isAuthor
               ? (manga) =>
                   sql`EXISTS (
@@ -71,7 +77,7 @@ export const Route = createFileRoute("/api/search")({
           },
           orderBy: searchEmbedding
             ? (t, { asc }) => asc(cosineDistance(t.embedding, searchEmbedding!))
-            : { updatedAt: "desc" },
+            : { updatedAt: "desc", id: "asc" },
           limit: PAGE_SIZE,
           offset: (page - 1) * PAGE_SIZE,
         });
